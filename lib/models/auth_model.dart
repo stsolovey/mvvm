@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mvvm/domain/api_cilent/api_cilent.dart';
 
 class AuthModel extends ChangeNotifier {
+  final _apiClient = ApiClient();
+
   final loginTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
@@ -11,7 +14,23 @@ class AuthModel extends ChangeNotifier {
   bool get canStartAuth => !_isAuthProgress;
 
   Future<void> auth(BuildContext context) async {
-
+     final login = loginTextController.text;
+     final password = passwordTextController.text;
+     if (login.isEmpty || password.isEmpty){
+       _errorMessage = 'Заполните логин и пароль';
+       notifyListeners();
+       return;
+     }
+     _errorMessage = null;
+     _isAuthProgress = true;
+     notifyListeners();
+     final token = await _apiClient.login(
+        login: login, 
+        password: password
+     );
+     _isAuthProgress = false;
+     notifyListeners();
+     print(token);
   }
 }
 
