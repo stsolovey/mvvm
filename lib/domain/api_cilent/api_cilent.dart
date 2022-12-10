@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 class ApiClient {
   final _client = HttpClient();
@@ -13,7 +14,7 @@ class ApiClient {
       return uri.replace(queryParameters: parameters);
     } else {
       return uri;
-    } 
+    }
   }
 
   Future<String> register(
@@ -21,17 +22,19 @@ class ApiClient {
       required String password,
       required String email}) async {
     String path = 'register';
-    final url = _makeUri(path);
 
     final parameters = <String, dynamic>{
       'login': login,
       'password': password,
       'email': email
     };
+
+    final url = _makeUri(path, parameters);
     final request = await _client.postUrl(url);
 
     request.headers.contentType = ContentType.json;
     request.write(jsonEncode(parameters));
+
     final response = await request.close();
 
     final json = (await response.jsonDecode()) as Map<String, dynamic>;
@@ -40,25 +43,24 @@ class ApiClient {
     return token;
   }
 
-  Future<String> login({
-      required String login, 
-      required String password
-      }) async {
-    print('started login');
+  Future<Map<String, dynamic>> login(
+      {required String login, required String password}) async {
     String path = 'login';
-    final url = _makeUri(path);
-    print('this is uri: $url');
+
     final parameters = <String, dynamic>{'login': login, 'password': password};
-    final request = await _client.postUrl(url);
+    final uri = _makeUri(path, parameters);
+
+    final request = await _client.postUrl(uri);
 
     request.headers.contentType = ContentType.json;
     request.write(jsonEncode(parameters));
+
     final response = await request.close();
 
     final json = (await response.jsonDecode()) as Map<String, dynamic>;
-    print(json);
-    final token = json['token'] as String;
-    return token;
+    //final token = json['token'] as String;
+    //return token;
+    return json;
   }
 }
 
