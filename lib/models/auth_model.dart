@@ -63,8 +63,8 @@ class AuthModel extends ChangeNotifier {
 
     await _tokenDataProvider.setToken(token);
 
-    unawaited(
-        Navigator.of(context).pushNamed(MainNavigationRouteNames.mainScreen));
+    unawaited(Navigator.of(context)
+        .pushReplacementNamed(MainNavigationRouteNames.mainScreen));
   }
 }
 

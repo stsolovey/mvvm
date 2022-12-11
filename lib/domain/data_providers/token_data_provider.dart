@@ -8,7 +8,7 @@ class TokenDataProvider {
   static const _secureStorage = FlutterSecureStorage();
 
   Future<String?> getToken() => _secureStorage.read(key: _Keys.token);
-  Future<void> setToken(String value) {
+  Future<void> setToken(String? value) {
     if (value != null) {
       return _secureStorage.write(key: _Keys.token, value: value);
     } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mvvm/domain/data_providers/token_data_provider.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
@@ -18,11 +19,13 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("TMDB"),
-      ),
+      appBar: AppBar(title: const Text("Thesis"), actions: [
+        IconButton(
+          onPressed: () => TokenDataProvider().setToken(null),
+          icon: const Icon(Icons.logout_rounded),
+        )
+      ]),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
